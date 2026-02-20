@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaPro Studio - Ultimate Media Toolkit</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>MediaPro Studio</h1>
+                <span class="tagline">Ultimate Media Toolkit</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#enhance" class="nav-link">Enhance</a></li>
+                <li><a href="#compress" class="nav-link">Compress</a></li>
+                <li><a href="#share" class="nav-link">Share</a></li>
+                <li><a href="#pdf" class="nav-link">PDF Editor</a></li>
+                <li><a href="#" class="nav-link" id="admin-link" style="display: none;">Admin Panel</a></li>
+                <li><a href="#" class="nav-link" id="login-link">Login</a></li>
+                <li><a href="#" class="nav-link" id="logout-link" style="display: none;">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="gradient-text">Transform Your Media</span>
+                <span class="subtitle">Enhance • Compress • Share • Edit</span>
+            </h1>
+            <p class="hero-description">
+                All-in-one platform for professional media processing with stunning 3D interface
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="main-container">
+        <!-- Photo Enhancement Section -->
+        <section id="enhance" class="feature-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="icon">✨</span>
+                    Photo Enhancement
+                </h2>
+                <p class="section-subtitle">Upscale your photos to HD or 4K quality</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-3d">
+                    <div class="upload-area" id="enhance-upload">
+                        <div class="upload-content">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p class="upload-text">Drag & drop your photo here</p>
+                            <p class="upload-hint">or click to browse</p>
+                            <input type="file" id="enhance-input" accept="image/*" class="file-input">
+                        </div>
+                    </div>
+                    <div class="preview-container" id="enhance-preview" style="display: none;">
+                        <div class="preview-wrapper">
+                            <div class="preview-box">
+                                <img id="enhance-original" class="preview-image" alt="Original">
+                                <div class="preview-label">Original</div>
+                            </div>
+                            <div class="preview-box">
+                                <img id="enhance-enhanced" class="preview-image" alt="Enhanced">
+                                <div class="preview-label">Enhanced</div>
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <select id="enhance-quality" class="quality-select">
+                                <option value="hd">HD (1920x1080)</option>
+                                <option value="4k">4K (3840x2160)</option>
+                            </select>
+                            <button class="btn-primary" id="enhance-btn">Enhance Photo</button>
+                            <button class="btn-secondary" id="enhance-download">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Compression Section -->
+        <section id="compress" class="feature-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="icon">🗜️</span>
+                    Photo Compression
+                </h2>
+                <p class="section-subtitle">Reduce file size while maintaining quality</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-3d">
+                    <div class="upload-area" id="compress-upload">
+                        <div class="upload-content">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p class="upload-text">Upload photo to compress</p>
+                            <p class="upload-hint">or click to browse</p>
+                            <input type="file" id="compress-input" accept="image/*" class="file-input">
+                        </div>
+                    </div>
+                    <div class="preview-container" id="compress-preview" style="display: none;">
+                        <div class="preview-wrapper">
+                            <div class="preview-box">
+                                <img id="compress-original" class="preview-image" alt="Original">
+                                <div class="preview-label">Original <span id="compress-original-size"></span></div>
+                            </div>
+                            <div class="preview-box">
+                                <img id="compress-compressed" class="preview-image" alt="Compressed">
+                                <div class="preview-label">Compressed <span id="compress-compressed-size"></span></div>
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <div class="slider-container">
+                                <label>Quality: <span id="compress-quality-value">80</span>%</label>
+                                <input type="range" id="compress-quality" min="10" max="100" value="80" class="slider">
+                            </div>
+                            <button class="btn-primary" id="compress-btn">Compress Photo</button>
+                            <button class="btn-secondary" id="compress-download">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Link Generation Section -->
+        <section id="share" class="feature-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="icon">🔗</span>
+                    Photo Link Generator
+                </h2>
+                <p class="section-subtitle">Generate shareable links for your photos</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-3d">
+                    <div class="upload-area" id="share-upload">
+                        <div class="upload-content">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p class="upload-text">Upload photo to generate link</p>
+                            <p class="upload-hint">or click to browse</p>
+                            <input type="file" id="share-input" accept="image/*" class="file-input">
+                        </div>
+                    </div>
+                    <div class="link-container" id="share-link-container" style="display: none;">
+                        <div class="link-preview">
+                            <img id="share-preview" class="link-preview-image" alt="Preview">
+                        </div>
+                        <div class="link-controls">
+                            <div class="link-input-group">
+                                <input type="text" id="share-link" class="link-input" readonly>
+                                <button class="btn-copy" id="share-copy-btn">
+                                    <span>Copy</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="link-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="share-expiry">
+                                    <span>Set expiry (7 days)</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="share-password">
+                                    <span>Password protect</span>
+                                </label>
+                            </div>
+                            <button class="btn-primary" id="share-generate-btn">Generate Link</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PDF Editor Section -->
+        <section id="pdf" class="feature-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="icon">📄</span>
+                    PDF Editor
+                </h2>
+                <p class="section-subtitle">Edit, modify, and enhance your PDF documents</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-3d">
+                    <div class="upload-area" id="pdf-upload">
+                        <div class="upload-content">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <p class="upload-text">Upload PDF to edit</p>
+                            <p class="upload-hint">or click to browse</p>
+                            <input type="file" id="pdf-input" accept=".pdf" class="file-input">
+                        </div>
+                    </div>
+                    <div class="pdf-editor-container" id="pdf-editor" style="display: none;">
+                        <div class="pdf-toolbar">
+                            <button class="tool-btn" id="pdf-add-text" title="Add Text">
+                                <span>📝</span> Add Text
+                            </button>
+                            <button class="tool-btn" id="pdf-add-image" title="Add Image">
+                                <span>🖼️</span> Add Image
+                            </button>
+                            <button class="tool-btn" id="pdf-highlight" title="Highlight">
+                                <span>🖍️</span> Highlight
+                            </button>
+                            <button class="tool-btn" id="pdf-draw" title="Draw">
+                                <span>✏️</span> Draw
+                            </button>
+                            <button class="tool-btn" id="pdf-rotate" title="Rotate Pages">
+                                <span>🔄</span> Rotate
+                            </button>
+                            <button class="tool-btn" id="pdf-delete-page" title="Delete Page">
+                                <span>🗑️</span> Delete Page
+                            </button>
+                        </div>
+                        <div class="pdf-viewer">
+                            <canvas id="pdf-canvas"></canvas>
+                        </div>
+                        <div class="pdf-controls">
+                            <div class="page-controls">
+                                <button class="btn-nav" id="pdf-prev">← Previous</button>
+                                <span id="pdf-page-info">Page 1 of 1</span>
+                                <button class="btn-nav" id="pdf-next">Next →</button>
+                            </div>
+                            <div class="pdf-actions">
+                                <button class="btn-primary" id="pdf-save">Save PDF</button>
+                                <button class="btn-secondary" id="pdf-download">Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 MediaPro Studio. All rights reserved.</p>
+            <p>Professional media processing made simple</p>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner-3d"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Admin Login</h2>
+                <button class="modal-close" id="close-login">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Login</button>
+                    <p class="forgot-password-link">
+                        <a href="#" id="forgot-password-link">Forgot Password?</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgot-password-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reset Password</h2>
+                <button class="modal-close" id="close-forgot-password">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Enter your email address and we'll send you a password reset link.</p>
+                <form id="forgot-password-form">
+                    <div class="form-group">
+                        <label for="forgot-email">Email Address</label>
+                        <input type="email" id="forgot-email" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Send Reset Link</button>
+                </form>
+                <div id="reset-link-container" style="display: none; margin-top: 1.5rem; padding: 1rem; background: rgba(102, 126, 234, 0.1); border-radius: 8px; border: 1px solid rgba(102, 126, 234, 0.3);">
+                    <p style="margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 600;">Reset link generated:</p>
+                    <div class="link-input-group">
+                        <input type="text" id="reset-link-display" class="link-input" readonly>
+                        <button class="btn-copy" id="copy-reset-link">
+                            <span>Copy</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                        Password reset link has been generated. Copy the link above to reset your password.
+                    </p>
+                    <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                        This link will expire in 24 hours.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div class="modal-overlay" id="reset-password-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Set New Password</h2>
+                <button class="modal-close" id="close-reset-password">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reset-password-form">
+                    <div class="form-group">
+                        <label for="reset-email">Email Address</label>
+                        <input type="email" id="reset-email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reset-token">Reset Token</label>
+                        <input type="text" id="reset-token" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Reset Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="admin-panel" style="display: none;">
+        <div class="admin-sidebar">
+            <div class="admin-logo">
+                <h2>Admin Panel</h2>
+                <p>MediaPro Studio</p>
+            </div>
+            <nav class="admin-nav">
+                <a href="#" class="admin-nav-link active" data-section="dashboard">
+                    <span>📊</span> Dashboard
+                </a>
+                <a href="#" class="admin-nav-link" data-section="users">
+                    <span>👥</span> User Management
+                </a>
+                <a href="#" class="admin-nav-link" data-section="features">
+                    <span>⚙️</span> Feature Control
+                </a>
+                <a href="#" class="admin-nav-link" data-section="analytics">
+                    <span>📈</span> Analytics
+                </a>
+                <a href="#" class="admin-nav-link" data-section="settings">
+                    <span>🔧</span> Settings
+                </a>
+            </nav>
+        </div>
+        <div class="admin-content">
+            <div class="admin-header">
+                <h1 id="admin-section-title">Dashboard</h1>
+                <button class="btn-secondary" id="close-admin">Close Admin Panel</button>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div class="admin-section active" id="section-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h3 id="stat-total-users">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✨</div>
+                        <div class="stat-info">
+                            <h3 id="stat-enhancements">0</h3>
+                            <p>Photo Enhancements</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🗜️</div>
+                        <div class="stat-info">
+                            <h3 id="stat-compressions">0</h3>
+                            <p>Photo Compressions</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔗</div>
+                        <div class="stat-info">
+                            <h3 id="stat-links">0</h3>
+                            <p>Links Generated</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📄</div>
+                        <div class="stat-info">
+                            <h3 id="stat-pdfs">0</h3>
+                            <p>PDFs Edited</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <h3 id="stat-storage">0 MB</h3>
+                            <p>Storage Used</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="recent-activity">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list" id="activity-list">
+                        <!-- Activity items will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div class="admin-section" id="section-users">
+                <div class="section-toolbar">
+                    <input type="text" id="user-search" class="search-input" placeholder="Search users...">
+                    <button class="btn-primary" id="add-user-btn">+ Add User</button>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Feature Control Section -->
+            <div class="admin-section" id="section-features">
+                <h2>Feature Management</h2>
+                <div class="feature-controls">
+                    <div class="feature-control-card">
+                        <div class="feature-info">
+                            <h3>Photo Enhancement</h3>
+                            <p>Allow users to upscale photos to HD/4K</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-enhance" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="feature-control-card">
+                        <div class="feature-info">
+                            <h3>Photo Compression</h3>
+                            <p>Enable image compression feature</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-compress" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="feature-control-card">
+                        <div class="feature-info">
+                            <h3>Photo Link Generation</h3>
+                            <p>Allow users to create shareable links</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-share" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="feature-control-card">
+                        <div class="feature-info">
+                            <h3>PDF Editor</h3>
+                            <p>Enable PDF editing capabilities</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-pdf" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="feature-settings">
+                    <h3>Feature Settings</h3>
+                    <div class="settings-group">
+                        <label>Max File Size (MB)</label>
+                        <input type="number" id="max-file-size" value="50" class="form-input">
+                    </div>
+                    <div class="settings-group">
+                        <label>Max Enhancements per Day</label>
+                        <input type="number" id="max-enhancements" value="100" class="form-input">
+                    </div>
+                    <div class="settings-group">
+                        <label>Link Expiry Days</label>
+                        <input type="number" id="link-expiry" value="7" class="form-input">
+                    </div>
+                    <button class="btn-primary" id="save-settings">Save Settings</button>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="admin-section" id="section-analytics">
+                <h2>Analytics & Reports</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Usage Trends</h3>
+                        <canvas id="usage-chart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="analytics-card">
+                        <h3>Feature Popularity</h3>
+                        <canvas id="feature-chart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="admin-section" id="section-settings">
+                <h2>System Settings</h2>
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>Site Name</label>
+                        <input type="text" id="site-name" value="MediaPro Studio" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Maintenance Mode</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="maintenance-mode">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Notifications</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="email-notifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <button class="btn-primary" id="save-system-settings">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal-overlay" id="add-user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <button class="modal-close" id="close-add-user">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-user-form">
+                    <div class="form-group">
+                        <label for="user-name">Full Name</label>
+                        <input type="text" id="user-name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email</label>
+                        <input type="email" id="user-email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-password">Password</label>
+                        <input type="password" id="user-password" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">Role</label>
+                        <select id="user-role" class="form-input">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                            <option value="moderator">Moderator</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Create User</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
