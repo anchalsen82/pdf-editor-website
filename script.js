@@ -687,3 +687,18 @@ setupDragAndDrop('pdf-upload', 'pdf-input');
 window.addEventListener('load', () => {
     init3DBackground();
 });
+async function testInsert() {
+  const { data, error } = await client
+    .from("users")
+    .insert([
+      { name: "Anchal", email: "anchal@test.com" }
+    ]);
+
+  if (error) {
+    console.log("Insert Error:", error);
+  } else {
+    console.log("Data Inserted:", data);
+  }
+}
+
+testInsert();
