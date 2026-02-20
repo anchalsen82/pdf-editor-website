@@ -631,5 +631,19 @@
 
     <script src="script.js"></script>
     <script src="admin.js"></script>
+    <!-- Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Supabase Configuration
+  const supabaseUrl = "https://pxyspncdxemtkomcptzp.supabase.co";
+  const supabaseKey = "sb_publishable_wPZYUHLG45C2omP1sFgbRw_tlTqvGLO";
+
+  // Create Supabase Client
+  const { createClient } = supabase;
+  const client = createClient(supabaseUrl, supabaseKey);
+
+  console.log("✅ Supabase Connected Successfully");
+</script>
 </body>
 </html>
