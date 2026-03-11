@@ -4,8 +4,8 @@
   "description": "MediaPro Studio - Ultimate Media Toolkit for photo enhancement, compression, sharing, and PDF editing",
   "main": "index.html",
   "scripts": {
-    "start": "npx serve .",
-    "dev": "npx serve ."
+    "start": "npx serve . -l 3000",
+    "dev": "npx serve . -l 3000"
   },
   "keywords": [
     "pdf-editor",
