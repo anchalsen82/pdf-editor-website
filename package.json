@@ -1,0 +1,18 @@
+{
+  "name": "pdf-editor-website",
+  "version": "1.0.0",
+  "description": "MediaPro Studio - Ultimate Media Toolkit for photo enhancement, compression, sharing, and PDF editing",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "pdf-editor",
+    "media-toolkit",
+    "photo-enhancement",
+    "image-compression"
+  ],
+  "author": "Anchal Singh",
+  "license": "MIT"
+}
